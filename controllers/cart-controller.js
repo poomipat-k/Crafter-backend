@@ -146,11 +146,11 @@ const getCartItemByUserId = async (req, res, next) => {
   }
 
   let cartItemQuantity = 0;
-  let cartObjects = userWithCartItem.cart.map((cartItem) => {
-    if (cartItem.paid === false) {
-      return cartItem.toObject({ getters: true });
-    }
-  });
+  let cartObjects = userWithCartItem.cart.filter(
+    (cartItem) => cartItem.toObject({ getters: true }).paid === false
+  );
+
+  cartObjects = cartObjects.map((item) => item.toObject({ getters: true }));
 
   cartObjects.forEach((item) => {
     cartItemQuantity += item.quantity;
@@ -321,7 +321,7 @@ const checkout = async (req, res, next) => {
         throw new Error("Can not checkout purchased item.");
       }
 
-      checkoutItem.push(found);
+      checkoutItem.push(found.toObject({ getters: true }));
     });
   } catch (err) {
     return next(new HttpError(err, 400));
@@ -330,10 +330,69 @@ const checkout = async (req, res, next) => {
   res.json({ items: checkoutItem });
 };
 
+const addLocation = async (req, res, next) => {
+  const userId = req.userData.userId;
+  let user;
+  try {
+    user = await User.findById(userId, "location");
+  } catch (err) {
+    const error = new HttpError("Could not fetch user data", 500);
+    return next(error);
+  }
+
+  if (!user) {
+    return next(new HttpError("Could not find user for provided id", 404));
+  }
+
+  const { address, city, zipcode, phone } = req.body;
+
+  // User input validation
+  if (
+    typeof address !== "string" &&
+    typeof city !== "string" &&
+    typeof zipcode !== "string" &&
+    typeof phone !== "string"
+  ) {
+    return next(new HttpError("Data type is not valild", 400));
+  }
+
+  if (!+zipcode || zipcode.length !== 5) {
+    return next(new HttpError("Zipcode input is not valid", 400));
+  }
+
+  user.location = { address, city, zipcode, phone };
+  try {
+    await user.save();
+  } catch (err) {
+    return next(new HttpError("Could not add location to your account", 500));
+  }
+
+  res.json({ location: user.location });
+};
+
+const getUserLocation = async (req, res, next) => {
+  const userId = req.userData.userId;
+  let user;
+  try {
+    user = await User.findById(userId, "location");
+  } catch (err) {
+    const error = new HttpError("Could not fetch user data", 500);
+    return next(error);
+  }
+
+  if (!user) {
+    return next(new HttpError("Could not find user for provided id", 404));
+  }
+
+  res.json({ location: user.location });
+};
+
 module.exports = {
   add2cart,
   deleteCartItem,
   getCartItemByUserId,
   updateCartItem,
   checkout,
+  addLocation,
+  getUserLocation,
 };

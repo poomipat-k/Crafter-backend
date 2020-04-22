@@ -15,4 +15,8 @@ router.delete("/:cartItemId", auth, cartControllers.deleteCartItem);
 
 router.post("/checkout", auth, cartControllers.checkout);
 
+router.post("/location", auth, cartControllers.addLocation);
+
+router.get("/location", auth, cartControllers.getUserLocation);
+
 module.exports = router;
