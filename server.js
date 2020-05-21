@@ -17,6 +17,10 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get((req, res, next) => {
+  res.send("<h1>This is a message from secured https nodejs</h1>");
+});
+
 app.use("/api/design", designRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/cart", cartRoutes);
