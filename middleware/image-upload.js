@@ -3,7 +3,7 @@ const multerS3 = require("multer-s3");
 const aws = require("aws-sdk");
 const { v1: uuidv1 } = require("uuid");
 
-const REGION = "ap-southeast-1";
+const REGION = process.env.AWS_S3_REGION;
 const { S3_BUCKET_NAME, S3_ACCESS_KEY, S3_SECRET_KEY } = process.env;
 
 const MIME_TYPE_MAP = {

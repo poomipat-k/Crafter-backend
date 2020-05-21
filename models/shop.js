@@ -149,7 +149,6 @@ const shopSchema = new Schema({
         price: { type: Number },
       },
     },
-    total: { type: Number, default: 0 },
   },
 });
 

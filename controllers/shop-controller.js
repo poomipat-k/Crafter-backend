@@ -36,18 +36,8 @@ const createItem = async (req, res, next) => {
   }
 
   let stockObject = {};
-  let total = 0;
-
   if (stock) {
     stockObject = JSON.parse(stock);
-    for (let key in stockObject) {
-      if (key === "total") {
-        continue;
-      }
-      for (let size in stockObject[key]) {
-        total += +stockObject[key][size].qty;
-      }
-    }
   }
 
   let newItem = new Shop({
@@ -62,7 +52,7 @@ const createItem = async (req, res, next) => {
     Images: indexedImagesUrl,
     price,
     maxPrice,
-    stock: { ...stockObject, total: total },
+    stock: { ...stockObject },
     sold,
     views,
   });

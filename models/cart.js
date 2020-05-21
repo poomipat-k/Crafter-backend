@@ -17,6 +17,8 @@ const cartItemSchema = new Schema({
   paid: { type: Boolean, default: false, required: true },
   status: { type: Number, required: true, default: 0 },
   itemId: { type: mongoose.Types.ObjectId, required: true, ref: "Shop" },
+  PayPalOrderId: { type: String },
+  PayPalCaptureId: { type: String },
   owner: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
 });
 

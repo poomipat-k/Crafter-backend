@@ -10,10 +10,10 @@ const userSchema = new Schema({
   cart: [{ type: mongoose.Types.ObjectId, required: true, ref: "CartItem" }],
   isAdmin: { type: Boolean, required: true, default: false },
   location: {
-    address: { type: String, required: true },
-    city: { type: String, required: true },
-    zipcode: { type: String, required: true },
-    phone: { type: String, required: true },
+    address: { type: String },
+    city: { type: String },
+    zipcode: { type: String },
+    phone: { type: String },
   },
   confirmed: { type: Boolean, required: true, defualt: false },
 });

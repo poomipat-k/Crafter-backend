@@ -71,6 +71,7 @@ const add2cart = async (req, res, next) => {
       itemId: itemId,
       variation: variation,
       owner: owner,
+      paid: false
     });
   } catch (err) {
     const error = new HttpError(
@@ -93,11 +94,12 @@ const add2cart = async (req, res, next) => {
       quantity,
       paid,
       status,
-      itemId,
+      itemId: mongoose.Types.ObjectId(itemId),
       owner,
     });
 
     try {
+
       const sess = await mongoose.startSession();
       sess.startTransaction();
       await newCartItem.save({ session: sess });
