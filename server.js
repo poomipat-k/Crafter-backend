@@ -17,10 +17,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get("/", (req, res, next) => {
-  res.json({ message: "first page" });
-});
-
 app.use("/api/design", designRoutes);
 app.use("/api/shop", shopRoutes);
 app.use("/api/cart", cartRoutes);
